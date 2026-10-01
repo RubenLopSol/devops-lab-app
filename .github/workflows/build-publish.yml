@@ -12,7 +12,7 @@ permissions:
   packages: write
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/devops-lab-app
+  IMAGE_REPO: devops-lab-app
 
 jobs:
   build-publish:
@@ -22,9 +22,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set short SHA
+      - name: Set image metadata
         id: vars
-        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+        run: |
+          OWNER_LC="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          SHORT_SHA="${GITHUB_SHA::7}"
+
+          echo "owner_lc=${OWNER_LC}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "image_name=ghcr.io/${OWNER_LC}/${IMAGE_REPO}" >> "$GITHUB_OUTPUT"
 
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
@@ -37,12 +43,12 @@ jobs:
       - name: Build image
         run: |
           docker build \
-            -t $IMAGE_NAME:main-${{ steps.vars.outputs.short_sha }} \
-            -t $IMAGE_NAME:latest \
+            -t ${{ steps.vars.outputs.image_name }}:main-${{ steps.vars.outputs.short_sha }} \
+            -t ${{ steps.vars.outputs.image_name }}:latest \
             .
 
       - name: Push image
         if: github.event_name != 'pull_request'
         run: |
-          docker push $IMAGE_NAME:main-${{ steps.vars.outputs.short_sha }}
-          docker push $IMAGE_NAME:latest
+          docker push ${{ steps.vars.outputs.image_name }}:main-${{ steps.vars.outputs.short_sha }}
+          docker push ${{ steps.vars.outputs.image_name }}:latest
