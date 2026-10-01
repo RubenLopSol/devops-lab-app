@@ -52,3 +52,17 @@ jobs:
         run: |
           docker push ${{ steps.vars.outputs.image_name }}:main-${{ steps.vars.outputs.short_sha }}
           docker push ${{ steps.vars.outputs.image_name }}:latest
+
+      - name: Notify platform repo
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PLATFORM_REPO_PAT }}
+          repository: RubenLopSol/devops-lab-platform
+          event-type: app-image-published
+          client-payload: |
+            {
+              "sha": "${{ steps.vars.outputs.short_sha }}",
+              "image": "${{ steps.vars.outputs.image_name }}",
+              "tag": "main-${{ steps.vars.outputs.short_sha }}"
+            }
