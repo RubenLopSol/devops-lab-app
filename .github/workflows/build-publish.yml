@@ -63,6 +63,8 @@ jobs:
           client-payload: |
             {
               "sha": "${{ steps.vars.outputs.short_sha }}",
+              "full_sha": "${{ github.sha }}",
+              "ref": "${{ github.ref_name }}",
               "image": "${{ steps.vars.outputs.image_name }}",
               "tag": "main-${{ steps.vars.outputs.short_sha }}"
             }
