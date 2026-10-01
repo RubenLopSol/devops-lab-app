@@ -1,0 +1,10 @@
+{
+  "name": "openpanel-app",
+  "version": "0.1.0",
+  "description": "Minimal OpenPanel rebuild app",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {}
+}
