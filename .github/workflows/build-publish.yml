@@ -3,8 +3,22 @@ name: Build and Publish App Image
 on:
   push:
     branches: [main]
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/build-publish.yml"
   pull_request:
     branches: [main]
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/build-publish.yml"
   workflow_dispatch:
 
 permissions:
