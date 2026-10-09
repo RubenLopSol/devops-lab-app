@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
     res.end(
       JSON.stringify({
         app: "openpanel-app",
-        message: "Hello from DevOps Lab via full GitOps pipeline, Holla!!",
+        message: "Hello from DevOps Lab via GitOps rebuild training!!",
         version: "0.1.0"
       })
     );
